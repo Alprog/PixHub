@@ -26,7 +26,9 @@ namespace PixHub
             device.SetBrightness(50);
 
             device.SendImage("alprog.png");
-            device.SendText("Alibaba baba yaga!");
+            device.SendText("Sonya!");
+
+            device.AddClock();
         }
 
     }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace PixHub
 {
@@ -27,7 +27,7 @@ namespace PixHub
         public static JsonSerializerOptions SerializationOptions = new JsonSerializerOptions { IncludeFields = true };
 
 
-        public async Task Post(Object requestObject)
+        public async Task PostAsync(Object requestObject)
         {
             var jsonText = JsonSerializer.Serialize(requestObject, SerializationOptions);
             var content = new StringContent(jsonText, Encoding.UTF8, "application/json");
@@ -36,27 +36,29 @@ namespace PixHub
             var response = JsonSerializer.Deserialize<SimpleResponse>(responseText, SerializationOptions);
         }
 
+        public void Post(Object requestObject)
+        {
+            PostAsync(requestObject).Wait();
+        }
+
         public void SetBrightness(int value)
         {
-            var Request = new SetBrightnessRequest
+            var request = new SetBrightnessRequest
             {
-                Command = "Channel/SetBrightness",
                 Brightness = value
             };
 
-            var task = Post(Request);
-            task.Wait();
+            Post(request);
         }
 
         public void ResetPicId()
         {
-            var Request = new SimpleRequest
+            var request = new SimpleRequest
             {
                 Command = "Draw/ResetHttpGifId"
             };
 
-            var task = Post(Request);
-            task.Wait();
+            Post(request);
         }
 
         public void SendImage(Bitmap bitmap)
@@ -65,9 +67,8 @@ namespace PixHub
             Debug.Assert(imageSize == 16 || imageSize == 32 || imageSize == 64);
             Debug.Assert(imageSize == bitmap.Size.Height);
 
-            var Request = new SendAnimationRequest
+            var request = new SendAnimationRequest
             {
-                Command = "Draw/SendHttpGif",
                 PicNum = 1,
                 PicWidth = imageSize,
                 PicOffset = 0,
@@ -76,8 +77,7 @@ namespace PixHub
                 PicData = Utils.BitmapToBase64(bitmap)
             };
 
-            var task = Post(Request);
-            task.Wait();
+            Post(request);
         }
 
         public void SendImage(string filePath)
@@ -88,23 +88,43 @@ namespace PixHub
 
         public void SendText(string text)
         {
-            var Request = new SendTextRequest
+            var request = new SendTextRequest
             {
-                Command = "Draw/SendHttpText",
                 TextId = 4,
                 x = 0,
                 y = 0,
                 dir = 0,
-                font = 4,
+                font = 7,
                 TextWidth = 64,
                 speed = 1,
                 TextString = text,
-                color = "#FFFF00",
+                color = "#0000FF",
                 align = HorizontalAlign.Left
             };
 
-            var task = Post(Request);
-            task.Wait();
+            Post(request);
+        }
+
+        public void AddClock()
+        {
+            var request = new SendItemListRequest();
+            request.ItemList = new List<ItemDesc>();
+            request.ItemList.Add(new ItemDesc
+            {
+                TextId = 2,
+                type = ItemType.DIVOOM_DISP_CUSTOM_DIAL_SUPPORT_HOUR_MIN_SEC,
+                x = 0,
+                y = 40,
+                dir = 0,
+                font = 18,
+                TextWidth = 64,
+                Textheight = 16,
+                speed = 1,
+                align = HorizontalAlign.Middle,
+                color = "#000000"
+            });
+
+            Post(request);
         }
     }
 }

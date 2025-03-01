@@ -2,12 +2,12 @@
 
 namespace PixHub
 {
-    public struct SimpleResponse
+    public class SimpleResponse
     {
         public int error_code;
     }
 
-    public struct DeviceInfo
+    public class DeviceInfo
     {
         public string DeviceName;
         public int DeviceId;
@@ -15,7 +15,7 @@ namespace PixHub
         public string DeviceMac;
     }
 
-    public struct FindDeviceResponse
+    public class FindDeviceResponse
     {
         public int ReturnCode;
         public string ReturnMessage;
