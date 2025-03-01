@@ -22,10 +22,10 @@ namespace PixHub
         {
             var device = await Connect();
 
-
+            device.ResetPicId();
             device.SetBrightness(50);
 
-            device.SendAnimation();
+            device.SendImage("alprog.png");
         }
 
     }

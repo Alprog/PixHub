@@ -18,6 +18,11 @@ namespace PixHub
         public List<DeviceInfo> DeviceList;
     }
 
+    public struct SimpleRequest
+    {
+        public string Command;
+    }
+
     public struct SetBrightnessRequest
     {
         public string Command;
