@@ -1,23 +1,6 @@
 ﻿
-using System.Collections.Generic;
-
 namespace PixHub
 {
-    public struct DeviceInfo
-    {
-        public string DeviceName;
-        public int DeviceId;
-        public string DevicePrivateIP;
-        public string DeviceMac;
-    }
-
-    public struct FindDeviceResponse
-    {
-        public int ReturnCode;
-        public string ReturnMessage;
-        public List<DeviceInfo> DeviceList;
-    }
-
     public struct SimpleRequest
     {
         public string Command;
@@ -40,8 +23,18 @@ namespace PixHub
         public string PicData;
     }
 
-    public struct RegularResponse
+    public struct SendTextRequest
     {
-        public int error_code;
+        public string Command;
+        public int TextId;
+        public int x;
+        public int y;
+        public int dir;
+        public int font;
+        public int TextWidth;
+        public string TextString;
+        public int speed;
+        public string color;
+        public HorizontalAlign align;
     }
 }

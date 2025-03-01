@@ -1,5 +1,4 @@
-﻿using pix;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -34,7 +33,7 @@ namespace PixHub
             var content = new StringContent(jsonText, Encoding.UTF8, "application/json");
             HttpResponseMessage responseMessage = await Client.PostAsync(RequestUrl, content);
             var responseText = await responseMessage.Content.ReadAsStringAsync();
-            var response = JsonSerializer.Deserialize<RegularResponse>(responseText, SerializationOptions);
+            var response = JsonSerializer.Deserialize<SimpleResponse>(responseText, SerializationOptions);
         }
 
         public void SetBrightness(int value)
@@ -85,6 +84,27 @@ namespace PixHub
         {
             var bitmap = new Bitmap(filePath);
             SendImage(bitmap);
+        }
+
+        public void SendText(string text)
+        {
+            var Request = new SendTextRequest
+            {
+                Command = "Draw/SendHttpText",
+                TextId = 4,
+                x = 0,
+                y = 0,
+                dir = 0,
+                font = 4,
+                TextWidth = 64,
+                speed = 1,
+                TextString = text,
+                color = "#FFFF00",
+                align = HorizontalAlign.Left
+            };
+
+            var task = Post(Request);
+            task.Wait();
         }
     }
 }

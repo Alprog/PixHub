@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace pix
+namespace PixHub
 {
     internal static class Utils
     {
